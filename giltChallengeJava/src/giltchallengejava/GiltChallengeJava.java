@@ -99,7 +99,7 @@ public class GiltChallengeJava {
                             }
                             if (!invalidInput) {
                                 // add the preferences for this customer to the list of boolean clauses
-                                clausesList.add(new Clause(new ArrayList(customerSet)));
+                                clausesList.add(new Clause(customerSet));
                             }
                         }
                     }
@@ -107,11 +107,14 @@ public class GiltChallengeJava {
                 }
 
                 // run the weighted sat solver on the set of boolean clauses
-                System.out.println("Number of paints: " + numberOfPaints);
-                Iterator<Clause> clausesIter = clausesList.iterator();
-                while (clausesIter.hasNext()) {
-                    clausesIter.next().print();
+                WSatSolver wSatSolver = new WSatSolver(clausesList, numberOfPaints);
+                String solution = wSatSolver.solve();
+                if (solution != null) {
+                    System.out.println(solution);
+                } else {
+                    System.out.println("No solution exists");
                 }
+
             } catch (IOException e) {
                 System.out.println("Error reading input file: " + e.getLocalizedMessage());
             }
